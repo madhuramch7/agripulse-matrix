@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriPulse Matrix - Farmer Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-emerald-800 text-white px-6 py-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-3">
+            <span class="text-2xl font-bold tracking-wide">AgriPulse Matrix</span>
+            <span class="bg-emerald-700 text-xs text-emerald-200 px-2 py-1 rounded-full">Farmer Portal</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="userDisplayName" class="text-sm font-medium">Welcome, Farmer</span>
+            <a href="index.html" class="bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 rounded-lg text-xs font-semibold transition">Logout</a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column: Soil Metrics & Land Plots (2 Spans) -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Soil Health Analytics Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-slate-800">Soil N-P-K & Health Trends</h2>
+                    <span class="text-xs text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md">Live Data</span>
+                </div>
+                <div class="h-64">
+                    <canvas id="soilTrendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Active Land Plots List -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-slate-800">Registered Land Plots</h2>
+                    <button class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">
+                        + Add New Plot
+                    </button>
+                </div>
+                
+                <div id="plotsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Sample Land Plot Card 1 -->
+                    <div class="p-4 border border-slate-100 bg-slate-50 rounded-xl space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-800">North Field (Plot A)</span>
+                            <span class="text-xs bg-green-100 text-green-700 font-semibold px-2 py-0.5 rounded">Optimal</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Area: 4.5 Acres • Soil Type: Loamy</p>
+                        <div class="text-xs text-slate-600 flex justify-between pt-2 border-t border-slate-200">
+                            <span>Nitrogen (N): 45 mg/kg</span>
+                            <span>pH: 6.8</span>
+                        </div>
+                    </div>
+
+                    <!-- Sample Land Plot Card 2 -->
+                    <div class="p-4 border border-slate-100 bg-slate-50 rounded-xl space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-800">South Field (Plot B)</span>
+                            <span class="text-xs bg-amber-100 text-amber-700 font-semibold px-2 py-0.5 rounded">Low Nitrogen</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Area: 2.8 Acres • Soil Type: Clay</p>
+                        <div class="text-xs text-slate-600 flex justify-between pt-2 border-t border-slate-200">
+                            <span>Nitrogen (N): 22 mg/kg</span>
+                            <span>pH: 7.2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: APCI Gauge & Smart Recommendations (1 Span) -->
+        <div class="space-y-6">
+            
+            <!-- APCI Credit Score Preview -->
+            <div class="bg-emerald-900 text-white p-6 rounded-2xl shadow-sm space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-semibold text-emerald-200 uppercase tracking-wider">APCI Rating</h3>
+                    <span class="text-xs bg-emerald-800 px-2 py-1 rounded text-emerald-300">Updated Today</span>
+                </div>
+                <div class="text-center py-2">
+                    <span class="text-5xl font-extrabold text-emerald-400">780</span>
+                    <p class="text-sm text-emerald-200 mt-1">Excellent Credit Eligibility</p>
+                </div>
+                <a href="loans.html" class="block text-center w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold py-2 rounded-lg text-sm transition">
+                    View Eligible Loan Schemes →
+                </a>
+            </div>
+
+            <!-- Soil Radar Analysis Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-md font-bold text-slate-800 mb-4">Nutrient Distribution</h3>
+                <div class="h-56">
+                    <canvas id="soilRadarChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Chart Setup Scripts -->
+    <script>
+        // Line Chart for Soil Health Trends
+        const ctxLine = document.getElementById('soilTrendChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                datasets: [
+                    {
+                        label: 'Nitrogen (N)',
+                        data: [15, 28, 36, 34, 46, 40, 65],
+                        borderColor: '#10b981',
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: 'Phosphorus (P)',
+                        data: [10, 35, 25, 53, 30, 58, 40],
+                        borderColor: '#f59e0b',
+                        tension: 0.4,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        // Radar Chart for Nutrient Balance
+        const ctxRadar = document.getElementById('soilRadarChart').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Nitrogen', 'Phosphorus', 'Potassium', 'Organic Matter', 'Moisture'],
+                datasets: [{
+                    label: 'Plot A Index',
+                    data: [80, 65, 75, 90, 60],
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    borderColor: '#10b981',
+                    pointBackgroundColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>
