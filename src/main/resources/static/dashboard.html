@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriPulse Matrix - Precision Farming Dashboard</title>
+    <title>AgriPulse Matrix - Farm Analytics</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
@@ -11,9 +11,6 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .carousel-slide {
-            transition: opacity 0.8s ease-in-out;
-        }
         .active-nav-item {
             background-color: #524238;
             border-left: 4px solid #A0522D;
@@ -21,17 +18,24 @@
         }
     </style>
 </head>
-<body class="bg-[#FAF8F5] text-[#2C241E] font-sans min-h-screen flex flex-col">
+<body class="bg-[#FAF8F5] text-[#2C241E] font-sans min-h-screen flex flex-col relative overflow-x-hidden">
 
-    <!-- Top Sleek Header (Palette 3 - Muted Dark Roast Brown) -->
-    <header class="bg-[#3D312A] text-white px-6 py-3.5 flex items-center justify-between sticky top-0 z-50 shadow-md">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-[#A0522D] flex items-center justify-center text-white font-bold text-xl shadow-md">
-                <i class="fa-solid fa-wheat-awn"></i>
-            </div>
-            <div>
-                <h1 class="text-xl font-bold tracking-tight text-[#FAF8F5]">AgriPulse Matrix</h1>
-                <p class="text-xs text-[#D9A378] font-medium tracking-wide">SMART AGRICULTURAL INTELLIGENCE</p>
+    <!-- Top Navigation Header -->
+    <header class="bg-[#3D312A] text-white px-6 py-3.5 flex items-center justify-between sticky top-0 z-40 shadow-md">
+        <div class="flex items-center space-x-4">
+            <!-- 3-Line Hamburger Menu Toggle Button -->
+            <button onclick="toggleSidebar()" class="text-[#EFE9DF] hover:text-[#D9A378] text-xl focus:outline-none p-1">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-[#A0522D] flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    <i class="fa-solid fa-wheat-awn"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-[#FAF8F5]">AgriPulse Matrix</h1>
+                    <p class="text-xs text-[#D9A378] font-medium tracking-wide">SMART AGRICULTURAL INTELLIGENCE</p>
+                </div>
             </div>
         </div>
 
@@ -42,121 +46,111 @@
             </div>
             <div class="flex items-center space-x-3 border-l border-[#524238] pl-6">
                 <span class="text-sm font-medium text-[#EFE9DF]">Welcome, <strong class="text-[#D9A378]">Farmer John</strong></span>
-                <a href="index.html" class="text-xs bg-[#524238] hover:bg-[#A0522D] text-[#EFE9DF] hover:text-white border border-[#6B574B] px-3 py-1.5 rounded-lg transition-all">
-                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
-                </a>
             </div>
         </div>
     </header>
 
-    <!-- Main Container with Sidebar & Content Area -->
-    <div class="flex flex-1 overflow-hidden">
-
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-[#312721] text-[#EFE9DF] border-r border-[#4A3B32] flex flex-col justify-between p-4 shrink-0">
-            <div class="space-y-6">
-                <div>
-                    <p class="text-[10px] font-bold text-[#B8A79B] uppercase tracking-widest px-3 mb-2">Select Field / Module</p>
-                    <nav class="space-y-1">
-                        <button onclick="switchView('overview')" id="nav-overview" class="active-nav-item w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#EFE9DF] hover:bg-[#42342C] transition-all text-sm font-medium">
-                            <i class="fa-solid fa-chart-line text-[#D9A378] w-5"></i>
-                            <span>Farm Overview</span>
-                        </button>
-                        <button onclick="switchView('fieldA')" id="nav-fieldA" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
-                            <i class="fa-solid fa-vector-square text-[#A0522D] w-5"></i>
-                            <span>North Field (Plot A)</span>
-                        </button>
-                        <button onclick="switchView('fieldB')" id="nav-fieldB" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
-                            <i class="fa-solid fa-vector-square text-[#8A9A86] w-5"></i>
-                            <span>South Field (Plot B)</span>
-                        </button>
-                    </nav>
-                </div>
-
-                <div>
-                    <p class="text-[10px] font-bold text-[#B8A79B] uppercase tracking-widest px-3 mb-2">Services & Portals</p>
-                    <nav class="space-y-1">
-                        <a href="sbi-portal.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
-                            <i class="fa-solid fa-building-columns text-blue-400 w-5"></i>
-                            <span>SBI Banking Portal</span>
-                        </a>
-                        <a href="loans.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
-                            <i class="fa-solid fa-hand-holding-dollar text-[#D9A378] w-5"></i>
-                            <span>Agri Loans</span>
-                        </a>
-                        <a href="traceability.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
-                            <i class="fa-solid fa-barcode text-purple-400 w-5"></i>
-                            <span>Crop Traceability</span>
-                        </a>
-                    </nav>
-                </div>
-            </div>
-
-            <div class="bg-[#3D312A] border border-[#4A3B32] p-3 rounded-xl text-center">
-                <p class="text-xs text-[#B8A79B]">Connected System</p>
-                <p class="text-sm font-bold text-[#D9A378]">APCI Credit Rating: 780</p>
-            </div>
-        </aside>
-
-        <!-- Main Dashboard Content -->
-        <main class="flex-1 overflow-y-auto p-6 space-y-6 bg-[#FAF8F5]">
-
-            <!-- Hero Image Carousel -->
-            <div class="relative w-full h-56 rounded-2xl overflow-hidden border border-[#EAE3D2] shadow-md">
-                <div id="slide1" class="carousel-slide absolute inset-0 opacity-100 bg-cover bg-center flex items-end p-6" style="background-image: linear-gradient(to top, rgba(61,49,42,0.85), transparent), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80');">
-                    <div>
-                        <span class="bg-[#A0522D] text-white text-xs px-3 py-1 rounded-full font-medium">AI Yield Monitoring</span>
-                        <h2 class="text-2xl font-bold text-white mt-2">Real-time Soil N-P-K Sensors Connected</h2>
-                    </div>
-                </div>
-                <div id="slide2" class="carousel-slide absolute inset-0 opacity-0 bg-cover bg-center flex items-end p-6" style="background-image: linear-gradient(to top, rgba(61,49,42,0.85), transparent), url('https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=1200&q=80');">
-                    <div>
-                        <span class="bg-[#8A9A86] text-white text-xs px-3 py-1 rounded-full font-medium">Automated Irrigation</span>
-                        <h2 class="text-2xl font-bold text-white mt-2">Smart Moisture & Weather Forecasting Active</h2>
-                    </div>
-                </div>
-                <div id="slide3" class="carousel-slide absolute inset-0 opacity-0 bg-cover bg-center flex items-end p-6" style="background-image: linear-gradient(to top, rgba(61,49,42,0.85), transparent), url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1200&q=80');">
-                    <div>
-                        <span class="bg-[#D9A378] text-[#3D312A] text-xs px-3 py-1 rounded-full font-bold">Credit Analytics</span>
-                        <h2 class="text-2xl font-bold text-white mt-2">Direct Bank Portal Integration for Instant Loans</h2>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dynamic Section Title -->
-            <div class="flex items-center justify-between border-b border-[#EAE3D2] pb-3">
-                <h2 id="view-title" class="text-xl font-bold text-[#3D312A]">Farm Overview Analytics</h2>
-                <button onclick="openPlotModal()" class="bg-[#A0522D] hover:bg-[#834122] text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition-all flex items-center space-x-2">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Add New Plot</span>
+    <!-- Sliding Collapsible Sidebar Drawer -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-[#3D312A]/50 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+    
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-[#312721] text-[#EFE9DF] border-r border-[#4A3B32] flex flex-col justify-between p-4 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl">
+        <div class="space-y-6">
+            <div class="flex items-center justify-between pb-3 border-b border-[#4A3B32]">
+                <span class="text-sm font-bold text-[#D9A378] tracking-wider uppercase">Navigation</span>
+                <button onclick="toggleSidebar()" class="text-[#B8A79B] hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Dynamic Field View Data Container -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Line Chart Panel -->
-                <div class="lg:col-span-2 bg-white border border-[#EAE3D2] rounded-xl p-5 shadow-sm">
-                    <h3 id="chart-heading" class="text-sm font-bold text-[#3D312A] mb-4">Soil N-P-K Trends Across Fields</h3>
-                    <div class="h-64">
-                        <canvas id="soilChart"></canvas>
-                    </div>
-                </div>
+            <div>
+                <p class="text-[10px] font-bold text-[#B8A79B] uppercase tracking-widest px-3 mb-2">Main</p>
+                <nav class="space-y-1">
+                    <a href="index.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
+                        <i class="fa-solid fa-house text-[#D9A378] w-5"></i>
+                        <span>Home</span>
+                    </a>
+                </nav>
+            </div>
 
-                <!-- Radar Chart / Metrics Panel -->
-                <div class="bg-white border border-[#EAE3D2] rounded-xl p-5 shadow-sm flex flex-col justify-between">
-                    <h3 class="text-sm font-bold text-[#3D312A] mb-2">Nutrient & Health Profile</h3>
-                    <div class="h-52">
-                        <canvas id="radarChart"></canvas>
-                    </div>
-                    <div id="field-metrics-box" class="mt-3 bg-[#FAF8F5] p-3 rounded-lg border border-[#EAE3D2] text-xs space-y-1">
-                        <div class="flex justify-between"><span class="text-[#8C7A6D]">Soil Type:</span> <span class="font-semibold text-[#3D312A]">Loamy / Clay Mix</span></div>
-                        <div class="flex justify-between"><span class="text-[#8C7A6D]">Total Area:</span> <span class="font-semibold text-[#A0522D]">7.3 Acres</span></div>
-                    </div>
+            <div>
+                <p class="text-[10px] font-bold text-[#B8A79B] uppercase tracking-widest px-3 mb-2">Select Plot View</p>
+                <nav class="space-y-1">
+                    <button onclick="switchView('overview')" id="nav-overview" class="active-nav-item w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#EFE9DF] hover:bg-[#42342C] transition-all text-sm font-medium">
+                        <i class="fa-solid fa-chart-line text-[#D9A378] w-5"></i>
+                        <span>Farm Overview</span>
+                    </button>
+                    <button onclick="switchView('fieldA')" id="nav-fieldA" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
+                        <i class="fa-solid fa-vector-square text-[#A0522D] w-5"></i>
+                        <span>North Field (Plot A)</span>
+                    </button>
+                    <button onclick="switchView('fieldB')" id="nav-fieldB" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
+                        <i class="fa-solid fa-vector-square text-[#8A9A86] w-5"></i>
+                        <span>South Field (Plot B)</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div>
+                <p class="text-[10px] font-bold text-[#B8A79B] uppercase tracking-widest px-3 mb-2">Services & Portals</p>
+                <nav class="space-y-1">
+                    <a href="sbi-portal.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
+                        <i class="fa-solid fa-building-columns text-blue-400 w-5"></i>
+                        <span>SBI Banking Portal</span>
+                    </a>
+                    <a href="loans.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
+                        <i class="fa-solid fa-hand-holding-dollar text-[#D9A378] w-5"></i>
+                        <span>Agri Loans</span>
+                    </a>
+                    <a href="traceability.html" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[#B8A79B] hover:text-[#FAF8F5] hover:bg-[#42342C] transition-all text-sm font-medium">
+                        <i class="fa-solid fa-barcode text-purple-400 w-5"></i>
+                        <span>Crop Traceability</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="bg-[#3D312A] border border-[#4A3B32] p-3 rounded-xl text-center">
+            <p class="text-xs text-[#B8A79B]">Connected System</p>
+            <p class="text-sm font-bold text-[#D9A378]">APCI Credit Rating: 780</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 space-y-6 max-w-7xl mx-auto w-full">
+
+        <!-- Dynamic Section Title & Action Button -->
+        <div class="flex items-center justify-between border-b border-[#EAE3D2] pb-3">
+            <h2 id="view-title" class="text-xl font-bold text-[#3D312A]">Farm Overview Analytics</h2>
+            <button onclick="openPlotModal()" class="bg-[#A0522D] hover:bg-[#834122] text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md transition-all flex items-center space-x-2">
+                <i class="fa-solid fa-plus"></i>
+                <span>Add New Plot</span>
+            </button>
+        </div>
+
+        <!-- Dynamic Field Analytics Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Line Chart -->
+            <div class="lg:col-span-2 bg-white border border-[#EAE3D2] rounded-2xl p-5 shadow-sm">
+                <h3 id="chart-heading" class="text-sm font-bold text-[#3D312A] mb-4">Soil N-P-K Trends Across Fields</h3>
+                <div class="h-64">
+                    <canvas id="soilChart"></canvas>
                 </div>
             </div>
 
-        </main>
-    </div>
+            <!-- Radar Chart / Metrics -->
+            <div class="bg-white border border-[#EAE3D2] rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+                <h3 class="text-sm font-bold text-[#3D312A] mb-2">Nutrient & Health Profile</h3>
+                <div class="h-52">
+                    <canvas id="radarChart"></canvas>
+                </div>
+                <div id="field-metrics-box" class="mt-3 bg-[#FAF8F5] p-3 rounded-lg border border-[#EAE3D2] text-xs space-y-1">
+                    <div class="flex justify-between"><span class="text-[#8C7A6D]">Soil Type:</span> <span class="font-semibold text-[#3D312A]">Loamy / Clay Mix</span></div>
+                    <div class="flex justify-between"><span class="text-[#8C7A6D]">Total Area:</span> <span class="font-semibold text-[#A0522D]">7.3 Acres</span></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
 
     <!-- Add New Plot Modal -->
     <div id="plotModal" class="fixed inset-0 bg-[#3D312A]/60 backdrop-blur-sm flex items-center justify-center hidden z-50">
@@ -182,17 +176,17 @@
         </div>
     </div>
 
-    <!-- JavaScript Handling Switch Views, Carousel, & Charts -->
+    <!-- JavaScript Logic -->
     <script>
-        // 1. Image Carousel Logic
-        let currentSlide = 1;
-        setInterval(() => {
-            document.getElementById(`slide${currentSlide}`).classList.replace('opacity-100', 'opacity-0');
-            currentSlide = (currentSlide % 3) + 1;
-            document.getElementById(`slide${currentSlide}`).classList.replace('opacity-0', 'opacity-100');
-        }, 4000);
+        // Toggle Sidebar Drawer
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
 
-        // 2. Chart Setup (Matching Sienna Bronze & Sage Leaf Green)
+        // Setup Charts
         const lineCtx = document.getElementById('soilChart').getContext('2d');
         const radarCtx = document.getElementById('radarChart').getContext('2d');
 
@@ -217,7 +211,7 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
         });
 
-        // 3. Selective Field Viewing Logic
+        // Switch Plot Views
         const viewData = {
             overview: {
                 title: "Farm Overview Analytics",
@@ -260,9 +254,11 @@
 
             radarChart.data.datasets[0].data = data.radar;
             radarChart.update();
+
+            toggleSidebar(); // Close drawer after selection
         }
 
-        // 4. Modal Functions
+        // Modal Controls
         function openPlotModal() { document.getElementById('plotModal').classList.remove('hidden'); }
         function closePlotModal() { document.getElementById('plotModal').classList.add('hidden'); }
         function savePlot() {
