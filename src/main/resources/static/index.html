@@ -50,16 +50,20 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
+            if (response.ok) {
+                statusDiv.textContent = "Login Successful! Redirecting...";
+                statusDiv.className = "mt-4 text-center text-sm font-medium text-emerald-600";
+                statusDiv.classList.remove('hidden');
 
-                if (response.ok) {
-                    statusDiv.textContent = "Login Successful! Redirecting...";
-                    statusDiv.className = "mt-4 text-center text-sm font-medium text-emerald-600";
-                    statusDiv.classList.remove('hidden');
-                } else {
-                    statusDiv.textContent = "Invalid credentials. Please try again.";
-                    statusDiv.className = "mt-4 text-center text-sm font-medium text-red-600";
-                    statusDiv.classList.remove('hidden');
-                }
+                // Redirect after 1 second so the user sees the success message
+                setTimeout(() => {
+                    window.location.href = '/dashboard.html';
+                }, 1000);
+            } else {
+                statusDiv.textContent = "Invalid credentials. Please try again.";
+                statusDiv.className = "mt-4 text-center text-sm font-medium text-red-600";
+                statusDiv.classList.remove('hidden');
+            }
             } catch (err) {
                 statusDiv.textContent = "Backend connection failed. Ensure Spring Boot is running.";
                 statusDiv.className = "mt-4 text-center text-sm font-medium text-red-600";
