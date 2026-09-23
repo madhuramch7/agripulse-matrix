@@ -269,5 +269,22 @@
             }
         }
     </script>
+<script>
+  async function loadMarketPrices() {
+    try {
+      const response = await fetch('/api/market-prices');
+      const data = await response.json();
+      console.log("Market Prices from Backend:", data);
+      
+      // Example: Display record count or render dynamically into your dashboard
+    } catch (error) {
+      console.error("Error loading market prices:", error);
+    }
+  }
+
+  // Load prices when page loads
+  document.addEventListener("DOMContentLoaded", loadMarketPrices);
+</script>
+
 </body>
 </html>
